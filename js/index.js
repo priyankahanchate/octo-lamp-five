@@ -21,9 +21,12 @@
 
 window.addEventListener('DOMContentLoaded', () => {
   const start = document.querySelector('#start');
+  const submit = document.querySelector('#btnSubmit');
+  const reset = document.querySelector('#Resetbtn')
   start.addEventListener('click', function (e) {
     document.querySelector('#quizBlock').style.display = 'block';
     start.style.display = 'none';
+    myFunction()
   });
   // quizArray QUESTIONS & ANSWERS
   // q = QUESTION, o = OPTIONS, a = CORRECT ANSWER
@@ -44,6 +47,16 @@ window.addEventListener('DOMContentLoaded', () => {
       o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
       a: 1,
     },
+    {
+      q: 'What is the capital of India',
+      o: ['Delhi', 'Mumbai', 'Bangalore', 'Sydney'],
+      a: 0,
+    },
+    {
+      q: 'What is the capital of America',
+      o: ['Sydney', 'London', 'Washington', 'LA'],
+      a: 2,
+    },
   ];
 
   // function to Display the quiz questions and answers from the object
@@ -61,11 +74,15 @@ window.addEventListener('DOMContentLoaded', () => {
                     <div>&nbsp;</div>`;
       quizWrap.innerHTML = quizDisplay;
     });
+
+
   };
 
   // Calculate the score
   const calculateScore = () => {
+    console.log("Calculate score called")
     let score = 0;
+
     quizArray.map((quizItem, index) => {
       for (let i = 0; i < 4; i++) {
         //highlight the li if it is the correct answer
@@ -76,14 +93,56 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (quizItem.a == i) {
           //change background color of li element here
+          document.getElementById(id = li).style.backgroundColor = "green";
+
         }
 
         if (radioElement.checked) {
           // code for task 1 goes here
+          if (i == quizItem.a) {
+            console.log("Question ", i, "PASSED")
+            score = score + 1;
+          }
         }
       }
     });
+
+    console.log("Calculate score DONE with score", score)
+    if (score == 5) {
+      console.log("All QUESTIONS Passed")
+
+    }
+    alert("You scored " + score + " out of 5 ");
+    return score;
   };
+
+  const resetfunction = () => {
+    console.log("reload ")
+    location.reload();
+  }
+  submit.addEventListener('click', calculateScore);
+  reset.addEventListener('click', resetfunction);
+
+  var seconds = 0, stop = 15, counterStarted = false, counter;
+  function myFunction() {
+    if (counterStarted === false) {
+      counterStarted = true;
+      counter = setInterval(function () {
+        if (seconds <= stop) {
+          document.getElementById('time').innerHTML = seconds;
+          seconds++;
+          console.log('TIMER RUNNING' + seconds)
+        } else {
+          document.getElementById('time').setAttribute("disabled", "disabled");
+          clearInterval(counter);
+          counterStarted = false;
+          seconds = 0;
+          let score1 = calculateScore()
+          alert("TIMEOUT YOU SCORED " + score1 + " out of 5 ");
+        }
+      }, 1000)
+    }
+  }
 
   // call the displayQuiz function
   displayQuiz();
